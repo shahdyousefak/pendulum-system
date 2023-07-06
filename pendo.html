@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multiple Pendulums</title>
+  <style>
+    /* Add your desired CSS styles here */
+    .pendulum-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .pendulum {
+      width: 200px;
+      height: 200px;
+      border: 2px solid black;
+      border-radius: 50%;
+      position: relative;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes pendulum-swing {
+      0% { transform: rotate(20deg); }
+      50% { transform: rotate(-20deg); }
+      100% { transform: rotate(20deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Multiple Pendulums</h1>
+
+  <div class="pendulum-container">
+    <div class="pendulum" id="pendulum-1"></div>
+    <div class="pendulum" id="pendulum-2"></div>
+    <div class="pendulum" id="pendulum-3"></div>
+    <div class="pendulum" id="pendulum-4"></div>
+    <div class="pendulum" id="pendulum-5"></div>
+  </div>
+
+  <script>
+    function createPendulum(id) {
+      const pendulum = document.getElementById(id);
+      const length = Math.floor(Math.random() * 100) + 100; // Random length between 100 and 200 pixels
+      const duration = Math.floor(Math.random() * 5) + 3; // Random duration between 3 and 7 seconds
+
+      pendulum.style.animationDuration = `${duration}s`;
+      pendulum.style.animationDelay = `-${duration / 2}s`;
+      pendulum.style.animationName = 'pendulum-swing';
+      pendulum.style.animationTimingFunction = 'linear';
+    }
+
+    // Create the five pendulums
+    createPendulum('pendulum-1');
+    createPendulum('pendulum-2');
+    createPendulum('pendulum-3');
+    createPendulum('pendulum-4');
+    createPendulum('pendulum-5');
+  </script>
+</body>
+</html>
