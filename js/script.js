@@ -64,7 +64,7 @@ function startPendulum(event) {
   const errorMessage = document.getElementById('error-message'); 
   errorMessage.textContent = ''; // Remove error message
 
-  fetch('/api/pendulum', {
+  fetch('/api/pendulums', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
