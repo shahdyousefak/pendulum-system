@@ -20,6 +20,17 @@ app.get('/', (req, res) => {
 app.use('/api', apiRouter);
 
 const port = 3000;
-app.listen(port, () => {
+// start the server - error-handling
+const server = app.listen(port, (error) => {
+  if (error) {
+    console.error('Error starting the server:', error);
+    process.exit(1); 
+  }
   console.log(`Server is listening on port ${port}`);
+});
+
+//generic error-handling
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ message: 'Internal Server Error' });
 });
