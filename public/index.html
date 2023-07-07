@@ -6,76 +6,90 @@
 </head>
 <body>
   <h1>Pendulum Simulation</h1>
-  
   <form id = "mainForm">
     
     <div id="pendulum1Form">
         <h3>Pendulum 1</h3>
         <label for="length">Length:</label>
-        <input type="number" id="length1" name="length" required><br>
+        <input type="number" id="length1" name="length" required>
+        <span>cm</span><br>
 
         <label for="mass">Mass:</label>
-        <input type="number" id="mass1" name="mass" required><br>
+        <input type="number" id="mass1" name="mass" required>
+        <span>g</span><br>
 
         <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle1" name="angle" required><br>
-
+        <input type="number" id="angle1" name="angle" required>
+        <span>degrees</span><br>
     </div>
 
     <div id="pendulum2Form">
         <h3>Pendulum 2</h3>
         <label for="length">Length:</label>
-        <input type="number" id="length2" name="length" required><br>
+        <input type="number" id="length2" name="length" required>
+        <span>cm</span><br>
 
         <label for="mass">Mass:</label>
-        <input type="number" id="mass2" name="mass" required><br>
+        <input type="number" id="mass2" name="mass" required>
+        <span>g</span><br>
 
         <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle2" name="angle" required><br>
-
+        <input type="number" id="angle2" name="angle" required>
+        <span>degrees</span><br>
     </div>
 
     <div id="pendulum3Form">
         <h3>Pendulum 3</h3>
         <label for="length">Length:</label>
-        <input type="number" id="length3" name="length" required><br>
+        <input type="number" id="length3" name="length" required>
+        <span>cm</span><br>
 
         <label for="mass">Mass:</label>
-        <input type="number" id="mass3" name="mass" required><br>
+        <input type="number" id="mass3" name="mass" required>
+        <span>g</span><br>
 
         <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle3" name="angle" required><br>
-
+        <input type="number" id="angle3" name="angle" required>
+        <span>degrees</span><br>
     </div>
 
     <div id="pendulum4Form">
         <h3>Pendulum 4</h3>
         <label for="length">Length:</label>
-        <input type="number" id="length4" name="length" required><br>
+        <input type="number" id="length4" name="length" required>
+        <span>cm</span><br>
 
         <label for="mass">Mass:</label>
-        <input type="number" id="mass4" name="mass" required><br>
+        <input type="number" id="mass4" name="mass" required>
+        <span>g</span><br>
 
         <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle4" name="angle" required><br>
-
+        <input type="number" id="angle4" name="angle" required>
+        <span>degrees</span><br>
     </div>
+
 
   <div id="pendulum5Form">
     <h3>Pendulum 5</h3>
     <label for="length">Length:</label>
-    <input type="number" id="length5" name="length" required><br>
+    <input type="number" id="length5" name="length" required>
+    <span>cm</span><br>
 
     <label for="mass">Mass:</label>
-    <input type="number" id="mass5" name="mass" required><br>
+    <input type="number" id="mass5" name="mass" required>
+    <span>g</span><br>
 
     <label for="angle">Initial Angle:</label>
-    <input type="number" id="angle5" name="angle" required><br>
-
+    <input type="number" id="angle5" name="angle" required>
+    <span>degrees</span><br>
   </div>
-  <button type="button" id="startButton" onclick = "submitPendulumData()">Start</button>
-  <button type="button" id="pauseButton">Pause</button>
-  <button type="button" id="stopButton">Stop</button>
+
+
+  <div id="error-message" style="display: none;"></div>
+
+  <button id="startButton" onclick="startPendulum(event)">Start</button>
+  <button id="pauseButton" onclick="togglePause()" style="display: none;">Pause</button>
+  
 </form>
 
 
