@@ -114,6 +114,7 @@ function togglePendulum(event) {
       return; // if there are invalid fields, stop
     }
     startButton.innerText = 'Stop';
+    pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
     startPendulum(event); // Call startPendulum function
   } else {
