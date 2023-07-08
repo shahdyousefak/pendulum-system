@@ -1,7 +1,9 @@
 const net = require('net');
 
 // Function starts a single pendulum instance on a single tcp port
-function startPendulumInstance(pendulum, port) {
+function startPendulumInstance(pendulum, port, i) {
+
+    console.log(pendulum, port-3000, "test")
   const server = net.createServer();
 
   // Handle error event when the port is already in use
@@ -37,6 +39,7 @@ function startPendulumInstances(pendulumArrays) {
 
   //for each pendulum instance, calculate the corresponding port number
   pendulumArrays.forEach((pendulumArray, i) => {
+    console.log("THIS IS THE ARRAY", pendulumArray)
     const port = basePort + i; 
     startPendulumInstance(pendulumArray, port);
   });
