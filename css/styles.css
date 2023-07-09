@@ -1,37 +1,91 @@
-h1{
-    font-family: fantasy;
-}
+
 .container {
     display: flex;
   }
   
-  #formContainer {
+#formContainer {
     flex: 1;
-  }
+}
   
-  #pendulumCanvas {
+#pendulumCanvas {
     flex: 1;
-  }
+}
   
-  body {
+body {
     margin: 0;
     padding: 0;
-  }
+}
   
-  h1 {
+h1 {
     text-align: center;
-    margin-top: 20px;
-  }
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
   
-  form {
+form {
     margin-left: 10px;
-  }
+}
   
-  canvas {
+canvas {
     display: block;
     margin-right: 15%;
-  }
+}
+
+h3 {
+    font-weight: 800;
+}
+
+input[name="length"],
+input[name="mass"],
+input[name="angle"] {
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 5 px;
+}
 
 
-  
-  
+#pendulum1Title {
+    color: palevioletred;
+ 
+}
+
+#length1 , #mass1, #angle1{
+    border-color: palevioletred;
+}
+
+#pendulum2Title {
+    color: seagreen;
+}
+
+#length2 , #mass2, #angle2{
+    border-color: seagreen;
+}
+
+#pendulum3Title {
+    color: rebeccapurple;
+}
+
+#length3 , #mass3, #angle3{
+    border-color: rebeccapurple;
+}
+
+#pendulum4Title {
+    color: darkblue;
+}
+
+#length4 , #mass4, #angle4{
+    border-color: darkblue;
+}
+
+#pendulum5Title {
+    color: darkred;
+}
+
+#length5 , #mass5, #angle5{
+    border-color: darkred;
+}
+
+#error-message {
+    color: red;
+    font-weight: bold;
+}
