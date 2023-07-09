@@ -1,5 +1,37 @@
-canvas {
-    display: block;
-    margin: 0 auto;
-    background-color: black;
+h1{
+    font-family: fantasy;
+}
+.container {
+    display: flex;
   }
+  
+  #formContainer {
+    flex: 1;
+  }
+  
+  #pendulumCanvas {
+    flex: 1;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  form {
+    margin-left: 10px;
+  }
+  
+  canvas {
+    display: block;
+    margin-right: 15%;
+  }
+
+
+  
+  
