@@ -3,8 +3,8 @@ const net = require('net');
 // Function starts a single pendulum instance on a single tcp port
 function startPendulumInstance(pendulum, port, i) {
 
-    console.log(pendulum, port-3000, "test")
-  const server = net.createServer();
+    console.log(pendulum, port-3000, "test");
+    const server = net.createServer();
 
   // Handle error event when the port is already in use
   server.on('error', (error) => {

@@ -64,6 +64,8 @@ function startPendulum(event) {
   const errorMessage = document.getElementById('error-message'); 
   errorMessage.textContent = ''; // Remove error message
 
+  createPendulums(pendulumValues);
+
   fetch('/api/pendulums', {
     method: 'POST',
     headers: {
@@ -84,7 +86,6 @@ function startPendulum(event) {
   })
   .catch(error => {
     console.error(error);
-    // Add your error handling logic here
   });
 }
 

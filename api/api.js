@@ -17,18 +17,18 @@ router.post('/pendulums', (req, res) => {
     req.body.pendulum4,
     req.body.pendulum5
   ];
-    // call the startPendulumInstances function and pass pendulumArrays
+    // call the startPendulumInstances function and pass pendulum arrays
     startPendulumInstances(pendulums);
     console.log(pendulums);
 
   res.status(201).json({ message: 'Pendulum data created successfully' });
 });
 
-// endpoint to retrieve the last set of pendulum parameters
-router.get('/pendulums/last-params', (req, res) => {
-    const lastParams = getLastPendulumParams();
+//endpoint to retrieve current positions of all pendulums
+router.get('/pendulums/positions', (req, res) => {
+    const positions = getPendulumPositions();
   
-    res.status(200).json({ pendulumParams: lastParams });
+    res.json({ positions });
   });
-
-module.exports = router;
+  
+  module.exports = router;

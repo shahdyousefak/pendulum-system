@@ -6,109 +6,157 @@
 </head>
 <body>
   <h1>Pendulum Simulation</h1>
-  <form id = "mainForm">
-    
-    <div id="pendulum1Form">
-        <h3>Pendulum 1</h3>
-        <label for="length">Length:</label>
-        <input type="number" id="length1" name="length" required>
-        <span>cm</span><br>
+  <div class = "container">
+    <div id="formContainer">
+      <form id = "mainForm">
+        
+        <div id="pendulum1Form">
+            <h3>Pendulum 1</h3>
+            <label for="length">Length:</label>
+            <input type="number" id="length1" name="length" required>
+            <span>cm</span><br>
 
-        <label for="mass">Mass:</label>
-        <input type="number" id="mass1" name="mass" required>
-        <span>g</span><br>
+            <label for="mass">Mass:</label>
+            <input type="number" id="mass1" name="mass" required>
+            <span>g</span><br>
 
-        <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle1" name="angle" required>
-        <span>degrees</span><br>
+            <label for="angle">Initial Angle:</label>
+            <input type="number" id="angle1" name="angle" required>
+            <span>degrees</span><br>
+        </div>
+
+        <div id="pendulum2Form">
+            <h3>Pendulum 2</h3>
+            <label for="length">Length:</label>
+            <input type="number" id="length2" name="length" required>
+            <span>cm</span><br>
+
+            <label for="mass">Mass:</label>
+            <input type="number" id="mass2" name="mass" required>
+            <span>g</span><br>
+
+            <label for="angle">Initial Angle:</label>
+            <input type="number" id="angle2" name="angle" required>
+            <span>degrees</span><br>
+        </div>
+
+        <div id="pendulum3Form">
+            <h3>Pendulum 3</h3>
+            <label for="length">Length:</label>
+            <input type="number" id="length3" name="length" required>
+            <span>cm</span><br>
+
+            <label for="mass">Mass:</label>
+            <input type="number" id="mass3" name="mass" required>
+            <span>g</span><br>
+
+            <label for="angle">Initial Angle:</label>
+            <input type="number" id="angle3" name="angle" required>
+            <span>degrees</span><br>
+        </div>
+
+        <div id="pendulum4Form">
+            <h3>Pendulum 4</h3>
+            <label for="length">Length:</label>
+            <input type="number" id="length4" name="length" required>
+            <span>cm</span><br>
+
+            <label for="mass">Mass:</label>
+            <input type="number" id="mass4" name="mass" required>
+            <span>g</span><br>
+
+            <label for="angle">Initial Angle:</label>
+            <input type="number" id="angle4" name="angle" required>
+            <span>degrees</span><br>
+        </div>
+
+
+        <div id="pendulum5Form">
+          <h3>Pendulum 5</h3>
+          <label for="length">Length:</label>
+          <input type="number" id="length5" name="length" required>
+          <span>cm</span><br>
+
+          <label for="mass">Mass:</label>
+          <input type="number" id="mass5" name="mass" required>
+          <span>g</span><br>
+
+          <label for="angle">Initial Angle:</label>
+          <input type="number" id="angle5" name="angle" required>
+          <span>degrees</span><br>
+        </div>
+
+
+        <div id="error-message" style="display: none;"></div>
+
+        <button id="pauseButton" style="display: none;">Pause</button>
+        <button id="startButton">Start</button>
+        
+      </form>
+        
     </div>
-
-    <div id="pendulum2Form">
-        <h3>Pendulum 2</h3>
-        <label for="length">Length:</label>
-        <input type="number" id="length2" name="length" required>
-        <span>cm</span><br>
-
-        <label for="mass">Mass:</label>
-        <input type="number" id="mass2" name="mass" required>
-        <span>g</span><br>
-
-        <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle2" name="angle" required>
-        <span>degrees</span><br>
-    </div>
-
-    <div id="pendulum3Form">
-        <h3>Pendulum 3</h3>
-        <label for="length">Length:</label>
-        <input type="number" id="length3" name="length" required>
-        <span>cm</span><br>
-
-        <label for="mass">Mass:</label>
-        <input type="number" id="mass3" name="mass" required>
-        <span>g</span><br>
-
-        <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle3" name="angle" required>
-        <span>degrees</span><br>
-    </div>
-
-    <div id="pendulum4Form">
-        <h3>Pendulum 4</h3>
-        <label for="length">Length:</label>
-        <input type="number" id="length4" name="length" required>
-        <span>cm</span><br>
-
-        <label for="mass">Mass:</label>
-        <input type="number" id="mass4" name="mass" required>
-        <span>g</span><br>
-
-        <label for="angle">Initial Angle:</label>
-        <input type="number" id="angle4" name="angle" required>
-        <span>degrees</span><br>
-    </div>
-
-
-  <div id="pendulum5Form">
-    <h3>Pendulum 5</h3>
-    <label for="length">Length:</label>
-    <input type="number" id="length5" name="length" required>
-    <span>cm</span><br>
-
-    <label for="mass">Mass:</label>
-    <input type="number" id="mass5" name="mass" required>
-    <span>g</span><br>
-
-    <label for="angle">Initial Angle:</label>
-    <input type="number" id="angle5" name="angle" required>
-    <span>degrees</span><br>
   </div>
 
+  <canvas id="pendulumCanvas" width="800" height="600"></canvas>
 
-  <div id="error-message" style="display: none;"></div>
+  <script>
+    // Get the canvas element
+    const canvas = document.getElementById('pendulumCanvas');
+    const ctx = canvas.getContext('2d');
 
-  <button id="pauseButton" style="display: none;">Pause</button>
-  <button id="startButton">Start</button>
-  
-</form>
+    // Pendulum variables
+    const rodLength = 200; // Length of the pendulum rod
+    const ballRadius = 20; // Radius of the pendulum balls
+
+    // Pendulum positions
+    const pendulumPositions = [
+      { x: canvas.width / 2 - rodLength, y: canvas.height / 2, color: 'hotpink' }, // Pendulum 1
+      { x: canvas.width / 2 - rodLength / 2, y: canvas.height / 2, color: 'seagreen' }, // Pendulum 2
+      { x: canvas.width / 2, y: canvas.height / 2, color: 'deepskyblue' }, // Pendulum 3
+      { x: canvas.width / 2 + rodLength / 2, y: canvas.height / 2, color: 'rebeccapurple' }, // Pendulum 4
+      { x: canvas.width / 2 + rodLength, y: canvas.height / 2, color: 'gold' } // Pendulum 5
+    ];
+
+    // Draw the pendulums
+    function drawPendulums() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the rigid support (rod)
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2);
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 4;
+      ctx.stroke();
 
 
-  <div class="pendulum-system">
-    <div class="rod"></div>
-    <div class="string" id="string-1"></div>
-    <div class="string" id="string-2"></div>
-    <div class="string" id="string-3"></div>
-    <div class="string" id="string-4"></div>
-    <div class="string" id="string-5"></div>
-    <div class="ball" id="ball-1"></div>
-    <div class="ball" id="ball-2"></div>
-    <div class="ball" id="ball-3"></div>
-    <div class="ball" id="ball-4"></div>
-    <div class="ball" id="ball-5"></div>
-  </div>
+      // Draw the pendulum rods and balls
+      for (let i = 0; i < pendulumPositions.length; i++) {
+        const pendulumPos = pendulumPositions[i];
 
+        // Draw the pendulum rod
+        ctx.beginPath();
+        ctx.moveTo(pendulumPos.x, pendulumPos.y);
+        ctx.lineTo(pendulumPos.x, pendulumPos.y + rodLength);
+        ctx.strokeStyle = pendulumPos.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
+        // Draw the pendulum ball
+        ctx.beginPath();
+        ctx.arc(pendulumPos.x, pendulumPos.y + rodLength, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = pendulumPos.color;
+        ctx.fill();
+      }
+    }
 
-  <script src="js/script.js"></script>
+    // Call the drawPendulums function to initially draw the pendulums
+    drawPendulums();
+  </script>
+    <script src="js/script.js"></script>
+
 </body>
 </html>
+
+
