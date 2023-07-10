@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { startPendulumInstance, startPendulumInstances } = require('../processes/pendulumProcess');
+const { startPendulumInstances } = require('../processes/pendulumProcess');
 
 let lastPendulumParams = [];
 
@@ -24,11 +24,5 @@ router.post('/pendulums', (req, res) => {
   res.status(201).json({ message: 'Pendulum data created successfully' });
 });
 
-//endpoint to retrieve current positions of all pendulums
-router.get('/pendulums/positions', (req, res) => {
-    const positions = getPendulumPositions();
-  
-    res.json({ positions });
-  });
   
   module.exports = router;

@@ -66,10 +66,10 @@ function startPendulum(event) {
   const pendulum4 = pendulumValues[3];
   const pendulum5 = pendulumValues[4];
 
-  const errorMessage = document.getElementById('error-message'); 
+  const errorMessage = document.getElementById('error-message');
   errorMessage.textContent = ''; // Remove error message
 
-  console.log("Sending data to the api..");
+  console.log("Sending data to the API...");
   fetch('/api/pendulums', {
     method: 'POST',
     headers: {
@@ -83,16 +83,19 @@ function startPendulum(event) {
       pendulum5
     })
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    console.log("Drawing pendulums...");
-    drawPendulums(); // Call drawPendulums function after receiving the response
-  })
-  .catch(error => {
-    console.error(error);
-  });
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to create pendulum data');
+      }
+      console.log('Pendulum data created successfully');
+      console.log("Drawing pendulums...");
+      drawPendulums(); // Call drawPendulums function after receiving the response
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
+
 
 function togglePause(event) {
   const pauseButton = document.getElementById('pauseButton');
@@ -139,26 +142,19 @@ function drawPendulums() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw the rigid support (rod)
-  ctx.beginPath();
-  ctx.moveTo(0, canvas.height / 2);
-  ctx.lineTo(canvas.width, canvas.height / 2);
-  ctx.strokeStyle = 'black';
-  ctx.lineWidth = 8;
-  ctx.stroke();
+  drawRod(ctx, canvas.width, canvas.height);
 
   const pendulumValues = getPendulumValues();
   const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
   const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
 
-    // Draw the pendulums
-    const pendulumPositions = [
-      { x: 1.5 * canvas.width / 5, y: canvas.height / 2, color: 'palevioletred' },
-      { x: 2 * canvas.width / 5, y: canvas.height / 2, color: 'seagreen' },
-      { x: 3 * canvas.width / 5, y: canvas.height / 2, color: 'rebeccapurple' },
-      { x: 4 * canvas.width / 5, y: canvas.height / 2, color: 'darkblue' },
-      { x: 4.5 * canvas.width / 5, y: canvas.height / 2, color: 'darkred' }
-    ];
-  
+  const pendulumPositions = [
+    { x: 1.5 * canvas.width / 5, y: canvas.height / 2, color: 'palevioletred' },
+    { x: 2 * canvas.width / 5, y: canvas.height / 2, color: 'seagreen' },
+    { x: 3 * canvas.width / 5, y: canvas.height / 2, color: 'rebeccapurple' },
+    { x: 4 * canvas.width / 5, y: canvas.height / 2, color: 'darkblue' },
+    { x: 4.5 * canvas.width / 5, y: canvas.height / 2, color: 'darkred' }
+  ];
 
   // Draw the pendulums
   for (let i = 0; i < pendulumValues.length; i++) {
@@ -169,27 +165,36 @@ function drawPendulums() {
     const ballRadius = mass * massScalingFactor;
     const bobX = pendulumPos.x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
     const bobY = pendulumPos.y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
-    
 
-    // Draw the pendulum string
-    ctx.beginPath();
-    ctx.moveTo(pendulumPos.x, pendulumPos.y);
-    ctx.lineTo(bobX, bobY);
-    ctx.strokeStyle = pendulumPos.color;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Draw the pendulum ball
-    ctx.beginPath();
-    ctx.arc(bobX, bobY, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = pendulumPos.color;
-    ctx.fill();
+    drawPendulumString(ctx, pendulumPos.x, pendulumPos.y, bobX, bobY, pendulumPos.color);
+    drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumPos.color);
   }
-
-  // other UI updates
 }
 
+function drawRod(ctx, width, height) {
+  ctx.beginPath();
+  ctx.moveTo(0, height / 2);
+  ctx.lineTo(width, height / 2);
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 8;
+  ctx.stroke();
+}
 
+function drawPendulumString(ctx, startX, startY, endX, endY, color) {
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(endX, endY);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawPendulumBall(ctx, centerX, centerY, radius, color) {
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
