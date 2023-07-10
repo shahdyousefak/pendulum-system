@@ -29,14 +29,14 @@ function checkForInvalidParameters(arr1, arr2, arr3, arr4, arr5) {
   const masses = [arr1[1], arr2[1], arr3[1], arr4[1], arr5[1]];
   const angles = [arr1[2], arr2[2], arr3[2], arr4[2], arr5[2]];
 
-  lenInvalid = lengths.some(element => parseFloat(element) > 1500) ? 1 : 0;
+  lenInvalid = lengths.some(element => parseFloat(element) > 500) ? 1 : 0;
   massInvalid = masses.some(element => parseFloat(element) > 500) ? 1 : 0;
   angInvalid = angles.some(element => parseFloat(element) > 180) ? 1 : 0;
 
   const errorMessages = [];
 
   if (lenInvalid) {
-    errorMessages.push('Length cannot be more than 1500 cm.');
+    errorMessages.push('Length cannot be more than 500 cm.');
   }
   if (massInvalid) {
     errorMessages.push('Mass cannot be more than 500 g.');
@@ -45,8 +45,13 @@ function checkForInvalidParameters(arr1, arr2, arr3, arr4, arr5) {
     errorMessages.push('Angle cannot be more than 180 degrees.');
   }
 
-  errorMessage.textContent = errorMessages.join(' '); // Join error messages and assign to textContent
-
+  if (errorMessages.length > 0) {
+    errorMessage.textContent = errorMessages.join(' '); 
+    errorMessage.style.display = 'block'; 
+  } else {
+    errorMessage.textContent = ''; // Clear the error message
+    errorMessage.style.display = 'none'; 
+  }
   return (lenInvalid || massInvalid || angInvalid); 
   }
 
@@ -142,15 +147,16 @@ function drawPendulums() {
   ctx.stroke();
 
   const pendulumValues = getPendulumValues();
-  const scalingFactor = 0.2; // Adjust the scaling factor based on your requirements
+  const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
+  const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
 
     // Draw the pendulums
     const pendulumPositions = [
-      { x: canvas.width / 5, y: canvas.height / 2, color: 'palevioletred' },
+      { x: 1.5 * canvas.width / 5, y: canvas.height / 2, color: 'palevioletred' },
       { x: 2 * canvas.width / 5, y: canvas.height / 2, color: 'seagreen' },
       { x: 3 * canvas.width / 5, y: canvas.height / 2, color: 'rebeccapurple' },
       { x: 4 * canvas.width / 5, y: canvas.height / 2, color: 'darkblue' },
-      { x: 5 * canvas.width / 5, y: canvas.height / 2, color: 'darkred' }
+      { x: 4.5 * canvas.width / 5, y: canvas.height / 2, color: 'darkred' }
     ];
   
 
@@ -159,8 +165,8 @@ function drawPendulums() {
     const [length, mass, angle] = pendulumValues[i];
     const pendulumPos = pendulumPositions[i];
 
-    const rodLength = length * scalingFactor;
-    const ballRadius = mass * scalingFactor;
+    const rodLength = length * lengthScalingFactor;
+    const ballRadius = mass * massScalingFactor;
     const bobX = pendulumPos.x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
     const bobY = pendulumPos.y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
     
