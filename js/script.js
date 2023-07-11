@@ -1,12 +1,12 @@
 let interval = false;
-function getPendulumValues() {
-  const pendulum1 = [document.getElementById('length1').value, document.getElementById('mass1').value, document.getElementById('angle1').value];
-  const pendulum2 = [document.getElementById('length2').value, document.getElementById('mass2').value, document.getElementById('angle2').value];
-  const pendulum3 = [document.getElementById('length3').value, document.getElementById('mass3').value, document.getElementById('angle3').value];
-  const pendulum4 = [document.getElementById('length4').value, document.getElementById('mass4').value, document.getElementById('angle4').value];
-  const pendulum5 = [document.getElementById('length5').value, document.getElementById('mass5').value, document.getElementById('angle5').value];
-
-  return [pendulum1, pendulum2, pendulum3, pendulum4, pendulum5];
+function getPendulumValues(canvas) {
+  return [
+    { start_x: 1.5 * canvas.width / 5, start_y: canvas.height / 2, color: 'palevioletred', length: document.getElementById('length1').value, 'mass': document.getElementById('mass1').value, 'angle': document.getElementById('angle1').value},
+    { start_x: 2 * canvas.width / 5, start_y: canvas.height / 2, color: 'seagreen', length: document.getElementById('length2').value, 'mass': document.getElementById('mass2').value, 'angle': document.getElementById('angle2').value },
+    { start_x: 3 * canvas.width / 5, start_y: canvas.height / 2, color: 'rebeccapurple', length: document.getElementById('length3').value, 'mass': document.getElementById('mass3').value, 'angle': document.getElementById('angle3').value },
+    { start_x: 4 * canvas.width / 5, start_y: canvas.height / 2, color: 'darkblue', length: document.getElementById('length4').value, 'mass': document.getElementById('mass4').value, 'angle': document.getElementById('angle4').value },
+    { start_x: 4.5 * canvas.width / 5, start_y: canvas.height / 2, color: 'darkred', length: document.getElementById('length5').value, 'mass': document.getElementById('mass5').value, 'angle': document.getElementById('angle5').value }
+  ]
 }
 
 function checkForEmptyParameters(arr1, arr2, arr3, arr4, arr5) {
@@ -71,21 +71,17 @@ function initPendulumData(pendulumValues) {
     event.preventDefault(); // Prevent the default form submission
     console.log("submit");
   
-    const pendulumValues = getPendulumValues();
-    const pendulum1 = pendulumValues[0];
-    const pendulum2 = pendulumValues[1];
-    const pendulum3 = pendulumValues[2];
-    const pendulum4 = pendulumValues[3];
-    const pendulum5 = pendulumValues[4];
-  
+    const pendulumValues = getPendulumValues(canvas);
+
     const errorMessage = document.getElementById('error-message');
     errorMessage.textContent = ''; // Remove error message
 
-    const pendulumData = pendulumValues.map(([length, mass, angle]) => {
+    const pendulumData = pendulumValues.map(x => {
       return {
-        length: parseFloat(length),
-        mass: parseFloat(mass),
-        angle: parseFloat(angle)
+        ...x,
+        length: parseFloat(x.length),
+        mass: parseFloat(x.mass),
+        angle: parseFloat(x.angle),        
       };
     });
   
@@ -139,17 +135,17 @@ function togglePendulum(event) {
   // Start button is clicked
   event.preventDefault(); // Prevent the default behavior of the button
   if (startButton.innerText === 'Start') {
-    pendulums = getPendulumValues()
-    if (checkForEmptyParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
-      return; // if there are empty fields, stop
-    }
-    if (checkForInvalidParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
-      return; // if there are invalid fields, stop
-    }
+    pendulums = getPendulumValues(canvas)
+    // if (checkForEmptyParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
+    //   return; // if there are empty fields, stop
+    // }
+    // if (checkForInvalidParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
+    //   return; // if there are invalid fields, stop
+    // }
     startButton.innerText = 'Stop';
     pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
-    initPendulumData(pendulums);
+    //initPendulumData(pendulums);
     startPendulum(event); // Call startPendulum function
     interval = setInterval(fetchPendulumPositions, 500);
 
@@ -159,9 +155,11 @@ function togglePendulum(event) {
     pauseButton.style.display = 'none';
   }
 }
-
+const canvas = document.getElementById('pendulumCanvas');
+const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
+const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
 function drawPendulums() {
-  const canvas = document.getElementById('pendulumCanvas');
+  
   const ctx = canvas.getContext('2d');
 
   // Clear the canvas
@@ -170,30 +168,25 @@ function drawPendulums() {
   // Draw the rigid support (rod)
   drawRod(ctx, canvas.width, canvas.height);
 
-  const pendulumValues = getPendulumValues();
-  const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
-  const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
+  const pendulumValues = getPendulumValues(canvas);
+
 
   const pendulumPositions = [
-    { x: 1.5 * canvas.width / 5, y: canvas.height / 2, color: 'palevioletred' },
-    { x: 2 * canvas.width / 5, y: canvas.height / 2, color: 'seagreen' },
-    { x: 3 * canvas.width / 5, y: canvas.height / 2, color: 'rebeccapurple' },
-    { x: 4 * canvas.width / 5, y: canvas.height / 2, color: 'darkblue' },
-    { x: 4.5 * canvas.width / 5, y: canvas.height / 2, color: 'darkred' }
+   
   ];
 
   // Draw the pendulums
   for (let i = 0; i < pendulumValues.length; i++) {
-    const [length, mass, angle] = pendulumValues[i];
+    const {length, mass, angle} = pendulumValues[i];
     const pendulumPos = pendulumPositions[i];
 
     const rodLength = length * lengthScalingFactor;
     const ballRadius = mass * massScalingFactor;
-    const bobX = pendulumPos.x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
-    const bobY = pendulumPos.y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
+    const bobX = pendulumValues[i].x ? pendulumValues[i].x : pendulumValues[i].start_x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
+    const bobY = pendulumValues[i].y ? pendulumValues[i].y : pendulumValues[i].start_y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
 
-    drawPendulumString(ctx, pendulumPos.x, pendulumPos.y, bobX, bobY, pendulumPos.color);
-    drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumPos.color);
+    drawPendulumString(ctx, pendulumValues[i].start_x, pendulumValues[i].start_y, bobX, bobY, pendulumValues[i].color);
+    drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumValues[i].color);
 
     fetch('/api/pendulumPositions')
     .then(response => response.json())
@@ -233,23 +226,48 @@ function drawPendulumBall(ctx, centerX, centerY, radius, color) {
 }
 
 function fetchPendulumPositions() {
+  let completed = 0
+  const pendulumArray = []
   for (let port = 3001; port <= 3005; port++ ) {
     fetch(`http://localhost:${port}`)
       .then(response => response.json())
       .then(positions => {
         // Use the positions data to update your UI
         console.log(positions);
+        pendulumArray.push(positions)
         // ... Update your UI with the positions data
+        if (++completed >= 5) {
+          console.log('all responded, now re-drawing', pendulumArray)
+          const ctx = canvas.getContext('2d');
+
+          // Clear the canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Draw the rigid support (rod)
+          drawRod(ctx, canvas.width, canvas.height);
+
+          pendulumArray.forEach(pendulum => {
+            //const [length, mass, angle] = pendulumValues[i];
+            const length = pendulum.length;
+            const mass = pendulum.mass;
+            const angle = pendulum.angle;
+            
+
+            const rodLength = length * lengthScalingFactor;
+            const ballRadius = mass * massScalingFactor;
+            const bobX = pendulum.x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
+            const bobY = pendulum.y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
+
+            drawPendulumString(ctx, pendulum.start_x, pendulum.start_y, bobX, bobY, pendulum.color);
+            drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulum.color);
+          })
+        }
       })
       .catch(error => {
         console.error('Error:', error);
       });
     }
 }
-
-// Call fetchPendulumPositions every 100 milliseconds (10 frames per second)
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
   const startButton = document.getElementById('startButton');
