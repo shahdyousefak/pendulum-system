@@ -257,8 +257,8 @@ function fetchPendulumPositions() {
 
             const rodLength = length * lengthScalingFactor;
             const ballRadius = mass * massScalingFactor;
-            const bobX = pendulum.x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
-            const bobY = pendulum.y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
+            const bobX = pendulum.start_x - rodLength * Math.cos((angle - 90) * Math.PI / 180);
+            const bobY = pendulum.start_y + rodLength * Math.sin((angle - 90) * Math.PI / 180);            
 
             drawPendulumString(ctx, pendulum.start_x, pendulum.start_y, bobX, bobY, pendulum.color);
             drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulum.color);

@@ -6,19 +6,37 @@ let pendulumData = [];
 let pendulumMapping = {}
 
 
-// This function updates the pendulum data using the Euler method
 function updatePendulumData(dt, pendulum) {
-  const g = 9.81; // Acceleration due to gravity
- 
-    const angularAcceleration = -g / pendulum.length * pendulum.angle;
-
+    const g = 9.81; // Acceleration due to gravity
+    let angleInRadians = pendulum.angle * Math.PI / 180;
+  
+    // Angular acceleration derived from the formula: -(g / L) * sin(theta)
+    const angularAcceleration = -g / pendulum.length * Math.sin(angleInRadians);
+  
+    // Update angular velocity
     pendulum.angularVelocity += angularAcceleration * dt;
-    pendulum.angle += pendulum.angularVelocity * dt;
-    pendulum.x =  pendulum.length * Math.sin(pendulum.angle),
-    pendulum.y =  pendulum.length * Math.cos(pendulum.angle)
+  
+    // Update the pendulum's angle
+    pendulum.angle += pendulum.angularVelocity * dt * 180 / Math.PI;
+  
+    // Normalize angle to be between -180 and 180
+    if (pendulum.angle > 180) {
+      pendulum.angle -= 360;
+    } else if (pendulum.angle < -180) {
+      pendulum.angle += 360;
+    }
+  
+    // Convert updated angle back to radians for calculating x and y
+    angleInRadians = pendulum.angle * Math.PI / 180;
+  
+    // Update x and y
+    pendulum.x = pendulum.start_x + pendulum.length * Math.sin(angleInRadians);
+    pendulum.y = pendulum.start_y - pendulum.length * Math.cos(angleInRadians); // Adjusted y calculation due to angle from horizontal
+  
     console.log("Updated PENDULUM DATA:", pendulum);
-}
+  }
 
+  
 // This function returns the current x and y positions of the pendulums
 function getPendulumPositions() {
   console.log('pendulum data', pendulumData)
