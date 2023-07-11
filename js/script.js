@@ -1,3 +1,4 @@
+let interval = false;
 function getPendulumValues() {
   const pendulum1 = [document.getElementById('length1').value, document.getElementById('mass1').value, document.getElementById('angle1').value];
   const pendulum2 = [document.getElementById('length2').value, document.getElementById('mass2').value, document.getElementById('angle2').value];
@@ -82,9 +83,9 @@ function initPendulumData(pendulumValues) {
 
     const pendulumData = pendulumValues.map(([length, mass, angle]) => {
       return {
-        length,
-        mass,
-        angle
+        length: parseFloat(length),
+        mass: parseFloat(mass),
+        angle: parseFloat(angle)
       };
     });
   
@@ -115,6 +116,12 @@ function initPendulumData(pendulumValues) {
   }
 
 function togglePause(event) {
+  if(interval) {
+    clearInterval(interval);
+    interval = false;
+  } else {
+    interval = setInterval(fetchPendulumPositions, 500);
+  }
   const pauseButton = document.getElementById('pauseButton');
   event.preventDefault(); // Prevent the default behavior of the button
 
@@ -143,8 +150,8 @@ function togglePendulum(event) {
     pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
     initPendulumData(pendulums);
-    startPendulum(event); // Call startPendulum function]
-    setInterval(fetchPendulumPositions, 2000);
+    startPendulum(event); // Call startPendulum function
+    interval = setInterval(fetchPendulumPositions, 500);
 
   } else {
     // stop button is clicked
@@ -226,16 +233,18 @@ function drawPendulumBall(ctx, centerX, centerY, radius, color) {
 }
 
 function fetchPendulumPositions() {
-  fetch('/api/pendulumPositions')
-    .then(response => response.json())
-    .then(positions => {
-      // Use the positions data to update your UI
-      console.log(positions);
-      // ... Update your UI with the positions data
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+  for (let port = 3001; port <= 3005; port++ ) {
+    fetch(`http://localhost:${port}`)
+      .then(response => response.json())
+      .then(positions => {
+        // Use the positions data to update your UI
+        console.log(positions);
+        // ... Update your UI with the positions data
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
 }
 
 // Call fetchPendulumPositions every 100 milliseconds (10 frames per second)
