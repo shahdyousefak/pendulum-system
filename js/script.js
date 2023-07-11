@@ -11,6 +11,7 @@ function getPendulumValues(canvas) {
 
 function checkForEmptyParameters(arr1, arr2, arr3, arr4, arr5) {
   const errorMessage = document.getElementById('error-message');
+  console.log("check empty params", arr1, arr2, arr3, arr4, arr5);
   const arrays = [arr1, arr2, arr3, arr4, arr5];
 
   if(arrays.some((arr) => arr.some((element) => element === ''))){
@@ -24,6 +25,7 @@ function checkForEmptyParameters(arr1, arr2, arr3, arr4, arr5) {
 
 function checkForInvalidParameters(arr1, arr2, arr3, arr4, arr5) {
   const errorMessage = document.getElementById('error-message');
+  console.log("check invalid params", arr1, arr2, arr3, arr4, arr5);
 
   let lenInvalid = 0, massInvalid = 0, angInvalid = 0;
   const lengths = [arr1[0], arr2[0], arr3[0], arr4[0], arr5[0]];
@@ -116,7 +118,7 @@ function togglePause(event) {
     clearInterval(interval);
     interval = false;
   } else {
-    interval = setInterval(fetchPendulumPositions, 500);
+    interval = setInterval(fetchPendulumPositions, 5000);
   }
   const pauseButton = document.getElementById('pauseButton');
   event.preventDefault(); // Prevent the default behavior of the button
@@ -136,18 +138,18 @@ function togglePendulum(event) {
   event.preventDefault(); // Prevent the default behavior of the button
   if (startButton.innerText === 'Start') {
     pendulums = getPendulumValues(canvas)
-    // if (checkForEmptyParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
-    //   return; // if there are empty fields, stop
-    // }
-    // if (checkForInvalidParameters(pendulums[0], pendulums[1], pendulums[2], pendulums[3], pendulums[4])) {
-    //   return; // if there are invalid fields, stop
-    // }
+    const pendulumParams = pendulums.map(({ length, mass, angle }) => [length, mass, angle]);
+    console.log(pendulumParams);
+    if (checkForEmptyParameters(...pendulumParams) || checkForInvalidParameters(...pendulumParams)) {
+      return;
+    }
+
     startButton.innerText = 'Stop';
     pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
     //initPendulumData(pendulums);
     startPendulum(event); // Call startPendulum function
-    interval = setInterval(fetchPendulumPositions, 500);
+    interval = setInterval(fetchPendulumPositions, 5000);
 
   } else {
     // stop button is clicked
