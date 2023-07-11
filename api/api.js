@@ -11,6 +11,7 @@ router.use(express.json());
 // endpoint to start 5 pendulum instances 
 router.post('/pendulums', (req, res) => {
   const pendulums = req.body.pendulumData;
+    
     // call the startPendulumInstances function and pass pendulum arrays
     startPendulumInstances(pendulums);
     console.log(pendulums);
