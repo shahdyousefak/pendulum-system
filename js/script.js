@@ -53,49 +53,66 @@ function checkForInvalidParameters(arr1, arr2, arr3, arr4, arr5) {
     errorMessage.style.display = 'none'; 
   }
   return (lenInvalid || massInvalid || angInvalid); 
-  }
+}
 
-function startPendulum(event) {
-  event.preventDefault(); // Prevent the default form submission
-  console.log("submit");
-
-  const pendulumValues = getPendulumValues();
-  const pendulum1 = pendulumValues[0];
-  const pendulum2 = pendulumValues[1];
-  const pendulum3 = pendulumValues[2];
-  const pendulum4 = pendulumValues[3];
-  const pendulum5 = pendulumValues[4];
-
-  const errorMessage = document.getElementById('error-message');
-  errorMessage.textContent = ''; // Remove error message
-
-  console.log("Sending data to the API...");
-  fetch('/api/pendulums', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      pendulum1,
-      pendulum2,
-      pendulum3,
-      pendulum4,
-      pendulum5
-    })
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to create pendulum data');
-      }
-      console.log('Pendulum data created successfully');
-      console.log("Drawing pendulums...");
-      drawPendulums(); // Call drawPendulums function after receiving the response
-    })
-    .catch(error => {
-      console.error('Error:', error);
+function initPendulumData(pendulumValues) {
+    pendulumData = pendulumValues.map(([length, mass, angle]) => {
+      return {
+        length: parseFloat(length) / 100, // Convert cm to m
+        mass: parseFloat(mass) / 1000, // Convert g to kg
+        angle: parseFloat(angle) * (Math.PI / 180), // Convert degrees to radians
+        angularVelocity: 0, // Initial angular velocity is zero
+      };
     });
 }
 
+  function startPendulum(event) {
+    event.preventDefault(); // Prevent the default form submission
+    console.log("submit");
+  
+    const pendulumValues = getPendulumValues();
+    const pendulum1 = pendulumValues[0];
+    const pendulum2 = pendulumValues[1];
+    const pendulum3 = pendulumValues[2];
+    const pendulum4 = pendulumValues[3];
+    const pendulum5 = pendulumValues[4];
+  
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = ''; // Remove error message
+
+    const pendulumData = pendulumValues.map(([length, mass, angle]) => {
+      return {
+        length,
+        mass,
+        angle
+      };
+    });
+  
+    const dt = 0.01; // Set the timestep (e.g., 0.01 seconds)
+  
+    console.log("Sending data to the API...");
+    fetch('/api/pendulums', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        pendulumData,
+        dt
+      })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to create pendulum data');
+        }
+        console.log('Pendulum data created successfully');
+        console.log("Drawing pendulums...");
+        drawPendulums();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
 function togglePause(event) {
   const pauseButton = document.getElementById('pauseButton');
@@ -125,7 +142,9 @@ function togglePendulum(event) {
     startButton.innerText = 'Stop';
     pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
-    startPendulum(event); // Call startPendulum function
+    initPendulumData(pendulums);
+    startPendulum(event); // Call startPendulum function]
+    setInterval(fetchPendulumPositions, 2000);
 
   } else {
     // stop button is clicked
@@ -168,6 +187,16 @@ function drawPendulums() {
 
     drawPendulumString(ctx, pendulumPos.x, pendulumPos.y, bobX, bobY, pendulumPos.color);
     drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumPos.color);
+
+    fetch('/api/pendulumPositions')
+    .then(response => response.json())
+    .then(pendulumPositions => {
+      // Use the pendulumPositions data to update the positions of the pendulums.
+      // This could involve redrawing the pendulums in their new positions.
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   }
 }
 
@@ -196,12 +225,27 @@ function drawPendulumBall(ctx, centerX, centerY, radius, color) {
   ctx.fill();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function fetchPendulumPositions() {
+  fetch('/api/pendulumPositions')
+    .then(response => response.json())
+    .then(positions => {
+      // Use the positions data to update your UI
+      console.log(positions);
+      // ... Update your UI with the positions data
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
 
+// Call fetchPendulumPositions every 100 milliseconds (10 frames per second)
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
   const startButton = document.getElementById('startButton');
   const pauseButton = document.getElementById('pauseButton');
 
-  
   // Add event listeners to the buttons
   startButton.addEventListener('click', togglePendulum);
   pauseButton.addEventListener('click', togglePause);
