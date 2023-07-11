@@ -66,8 +66,6 @@ function startPendulumInstance(pendulum, port) {
 }
 
 function startPendulumInstances(pendulumArrays) {
-// Stops any running pendulum instances
-//stopPendulumInstances();
   const basePort = 3000;
 
   pendulumArrays.forEach((pendulumArray, i) => {
