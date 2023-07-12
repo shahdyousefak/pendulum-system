@@ -19,12 +19,4 @@ router.post('/pendulums', (req, res) => {
   res.status(201).json({ message: 'Pendulum data created successfully' });
 });
 
-
-// GET endpoint to retrieve the current positions of the pendulums
-router.get('/pendulumPositions', (req, res) => {
-  const positions = getPendulumPositions();
-  res.status(200).json(positions);
-});
-
-  
   module.exports = router;

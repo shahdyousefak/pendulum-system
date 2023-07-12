@@ -118,7 +118,7 @@ function togglePause(event) {
     clearInterval(interval);
     interval = false;
   } else {
-    interval = setInterval(fetchPendulumPositions, 5000);
+    interval = setInterval(fetchPendulumPositions, 100);
   }
   const pauseButton = document.getElementById('pauseButton');
   event.preventDefault(); // Prevent the default behavior of the button
@@ -149,7 +149,7 @@ function togglePendulum(event) {
     pauseButton.style.display = 'inline-block';
     //initPendulumData(pendulums);
     startPendulum(event); // Call startPendulum function
-    interval = setInterval(fetchPendulumPositions, 5000);
+    interval = setInterval(fetchPendulumPositions, 100);
 
   } else {
     // stop button is clicked
@@ -160,6 +160,7 @@ function togglePendulum(event) {
 const canvas = document.getElementById('pendulumCanvas');
 const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
 const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
+
 function drawPendulums() {
   
   const ctx = canvas.getContext('2d');
@@ -180,25 +181,13 @@ function drawPendulums() {
   // Draw the pendulums
   for (let i = 0; i < pendulumValues.length; i++) {
     const {length, mass, angle} = pendulumValues[i];
-    const pendulumPos = pendulumPositions[i];
-
     const rodLength = length * lengthScalingFactor;
     const ballRadius = mass * massScalingFactor;
-    const bobX = pendulumValues[i].x ? pendulumValues[i].x : pendulumValues[i].start_x + rodLength * Math.sin((90 - angle) * Math.PI / 180);
-    const bobY = pendulumValues[i].y ? pendulumValues[i].y : pendulumValues[i].start_y + rodLength * Math.cos((90 - angle) * Math.PI / 180);
+    const bobX = pendulumValues[i].x ? pendulumValues[i].x : pendulumValues[i].start_x - rodLength * Math.sin((180 - angle) * Math.PI / 180);
+    const bobY = pendulumValues[i].y ? pendulumValues[i].y : pendulumValues[i].start_y - rodLength * Math.cos((180 - angle) * Math.PI / 180);
 
     drawPendulumString(ctx, pendulumValues[i].start_x, pendulumValues[i].start_y, bobX, bobY, pendulumValues[i].color);
     drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumValues[i].color);
-
-    fetch('/api/pendulumPositions')
-    .then(response => response.json())
-    .then(pendulumPositions => {
-      // Use the pendulumPositions data to update the positions of the pendulums.
-      // This could involve redrawing the pendulums in their new positions.
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
   }
 }
 
@@ -258,7 +247,7 @@ function fetchPendulumPositions() {
             const rodLength = length * lengthScalingFactor;
             const ballRadius = mass * massScalingFactor;
             const bobX = pendulum.start_x - rodLength * Math.cos((angle - 90) * Math.PI / 180);
-            const bobY = pendulum.start_y + rodLength * Math.sin((angle - 90) * Math.PI / 180);            
+            const bobY = pendulum.start_y - rodLength * Math.sin((angle - 90) * Math.PI / 180);            
 
             drawPendulumString(ctx, pendulum.start_x, pendulum.start_y, bobX, bobY, pendulum.color);
             drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulum.color);

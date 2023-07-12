@@ -5,47 +5,38 @@ const fetch = require('cross-fetch');
 let pendulumData = [];
 let pendulumMapping = {}
 
-
 function updatePendulumData(dt, pendulum) {
-    const g = 9.81; // Acceleration due to gravity
-    let angleInRadians = pendulum.angle * Math.PI / 180;
-  
-    // Angular acceleration derived from the formula: -(g / L) * sin(theta)
-    const angularAcceleration = -g / pendulum.length * Math.sin(angleInRadians);
-  
-    // Update angular velocity
+    // Calculate the angular acceleration
+    const g = 9.81; // Acceleration due to gravity (m/s^2)
+    const angularAcceleration = -g / pendulum.length * Math.sin(pendulum.angle);
+    
+    // Update the angular velocity and the angle
     pendulum.angularVelocity += angularAcceleration * dt;
-  
-    // Update the pendulum's angle
-    pendulum.angle += pendulum.angularVelocity * dt * 180 / Math.PI;
-  
-    // Normalize angle to be between -180 and 180
-    if (pendulum.angle > 180) {
-      pendulum.angle -= 360;
-    } else if (pendulum.angle < -180) {
-      pendulum.angle += 360;
+    pendulum.angle += pendulum.angularVelocity * dt;
+    
+    // Keep the angle between 0 and 2π
+    pendulum.angle = pendulum.angle % (2 * Math.PI);
+    if (pendulum.angle < 0) {
+        pendulum.angle += 2 * Math.PI;
     }
-  
-    // Convert updated angle back to radians for calculating x and y
-    angleInRadians = pendulum.angle * Math.PI / 180;
-  
-    // Update x and y
-    pendulum.x = pendulum.start_x + pendulum.length * Math.sin(angleInRadians);
-    pendulum.y = pendulum.start_y - pendulum.length * Math.cos(angleInRadians); // Adjusted y calculation due to angle from horizontal
-  
-    console.log("Updated PENDULUM DATA:", pendulum);
-  }
+    
+    // Calculate the new position of the pendulum bob
+    pendulum.x = pendulum.start_x + pendulum.length * Math.sin(pendulum.angle);
+    pendulum.y = pendulum.start_y - pendulum.length * Math.cos(pendulum.angle);
 
-  
-// This function returns the current x and y positions of the pendulums
-function getPendulumPositions() {
-  console.log('pendulum data', pendulumData)
-  return pendulumData.map(pendulum => {
-    return {
-     
-    };
-  });
+    console.log("Updated PENDULUM DATA:", pendulum);
 }
+
+
+  function clampAngle(angle) {
+    while (angle > 180) {
+      angle -= 360;
+    }
+    while (angle < -180) {
+      angle += 360;
+    }
+    return angle;
+  }
 
 function startPendulumInstance(pendulum, port) {
   const server = http.createServer(function (req, res) {   //create web server
@@ -92,4 +83,4 @@ function startPendulumInstances(pendulumArrays) {
   });
 }
 
-module.exports = { startPendulumInstances, updatePendulumData, getPendulumPositions };
+module.exports = { startPendulumInstances, updatePendulumData };
