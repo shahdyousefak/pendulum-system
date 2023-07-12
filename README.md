@@ -1,4 +1,5 @@
 # vention-project
+<img width="1046" alt="Screen Shot 2023-07-11 at 9 36 03 PM" src="https://github.com/shahdyousefak/vention-project/assets/67276189/87097b52-cb5f-442e-b86c-4b074a2504b5">
 
 In node.js, implement a "simple pendulum" in 1 dimension. A REST interface will allow to set up an initial
 angular offset, a mass, a string length (or other settings of your choice). 
