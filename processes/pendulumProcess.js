@@ -20,16 +20,24 @@ let pendulumMapping = {}
  * @param {object} pendulum - The pendulum instance to update.
  */
 function updatePendulumData(dt, pendulum) {
-    // Calculate the angular acceleration
     const g = 9.81; // Acceleration due to gravity (m/s^2)
     const angularAcceleration = g / pendulum.length * Math.sin(pendulum.angle);
 
-    // Update angular velocity
     pendulum.angularVelocity += angularAcceleration * dt;
-    pendulum.angle = 360 - ((360 - pendulum.angle + pendulum.angularVelocity * dt * 180 / Math.PI) % 360);
 
-    const adjustedAngle = 360 - pendulum.angle; // Adjust the angle
+    let newAngle = 360 - ((360 - pendulum.angle + pendulum.angularVelocity * dt * 180 / Math.PI) % 360);
+
+    // Check if the pendulum is swinging above the rod
+    if (newAngle > 180 || newAngle < 0) {
+        pendulum.angularVelocity = -pendulum.angularVelocity;  // Reverse the direction of swing
+        newAngle = pendulum.angle;  // Keep the angle the same
+    }
+
+    pendulum.angle = newAngle;
+
+    const adjustedAngle = 360 - pendulum.angle; 
     const angleInRadians = adjustedAngle * Math.PI / 180;
+
     // Update x and y
     pendulum.x = pendulum.start_x + pendulum.length * Math.cos(angleInRadians);
     pendulum.y = pendulum.start_y - pendulum.length * Math.sin(angleInRadians);
