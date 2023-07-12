@@ -161,6 +161,11 @@ function togglePendulum(event) {
     startButton.innerText = 'Start';
     startButton.style.backgroundColor = 'green';
     pauseButton.style.display = 'none';
+
+    // Stop the pendulum animation
+    clearInterval(interval);
+    interval = false;
+
   }
 }
 const canvas = document.getElementById('pendulumCanvas');
