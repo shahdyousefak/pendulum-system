@@ -15,7 +15,7 @@ You can navigate to localhost:3001 -> localhost:3005 to retrieve the positions o
 
 Let's have one UI process, displaying in the web browser the five pendulums: configured. check server.js.
 
-It would allow the user to configure them (starting angle, mass, length, or anything else you have chosen) in an intuitive way, conveying an easy-to-use user experience. The UI should be done using pure javascript and some CSS: index.html & styles.css contains the static elements & styling that build this application. certain aspects of this front-end is handled in script.js such as the error messages and dynamic styling of the buttons.
+It would allow the user to configure them (starting angle, mass, length, or anything else you have chosen) in an intuitive way, conveying an easy-to-use user experience. The UI should be done using pure javascript and some CSS: index.html & styles.css contains the static elements & styling that build this application. certain aspects of this front-end is handled in script.js such as the error messages and dynamic styling of the buttons - as well as the pendulum movement and styling.
 
 Finally, all the resulting parameters of that "configuration" would be transferred in JSON format to the
 REST API: along with the real-time data of the pendulum.
