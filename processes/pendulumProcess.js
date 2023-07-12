@@ -1,10 +1,24 @@
-// pendulumProcess.js
+/**
+ * Module for simulating and updating pendulum data.
+ * Handles the creation of pendulum instances, updating their data based on physics calculations, and serving the updated data over HTTP.
+ * @module pendulumProcess
+ */
+
 const http = require('http');
 const fetch = require('cross-fetch');
 
-let pendulumData = [];
+/**
+ * Object to map pendulum instances to their corresponding port numbers.
+ * @type {Object}
+ */
 let pendulumMapping = {}
 
+
+/**
+ * Updates the pendulum data based on the elapsed time and the current pendulum instance.
+ * @param {number} dt - The elapsed time in seconds.
+ * @param {object} pendulum - The pendulum instance to update.
+ */
 function updatePendulumData(dt, pendulum) {
     // Calculate the angular acceleration
     const g = 9.81; // Acceleration due to gravity (m/s^2)
@@ -27,17 +41,11 @@ function updatePendulumData(dt, pendulum) {
     console.log("Updated PENDULUM DATA:", pendulum);
 }
 
-
-  function clampAngle(angle) {
-    while (angle > 180) {
-      angle -= 360;
-    }
-    while (angle < -180) {
-      angle += 360;
-    }
-    return angle;
-  }
-
+/**
+ * Starts a pendulum instance on the specified port.
+ * @param {object} pendulum - The pendulum instance to start.
+ * @param {number} port - The port number to run the pendulum instance on.
+ */
 function startPendulumInstance(pendulum, port) {
   const server = http.createServer(function (req, res) {   //create web server
     if (req.url == '/') { //check the URL of the current request
@@ -74,6 +82,11 @@ function startPendulumInstance(pendulum, port) {
   });
 }
 
+/**
+ * Starts multiple pendulum instances based on the provided array of pendulum data.
+ * Each pendulum instance runs on a unique port.
+ * @param {Array} pendulumArrays - An array of pendulum data objects.
+ */
 function startPendulumInstances(pendulumArrays) {
   const basePort = 3000;
 
