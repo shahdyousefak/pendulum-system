@@ -118,7 +118,7 @@ function togglePause(event) {
     clearInterval(interval);
     interval = false;
   } else {
-    interval = setInterval(fetchPendulumPositions, 100);
+    interval = setInterval(fetchPendulumPositions, 500);
   }
   const pauseButton = document.getElementById('pauseButton');
   event.preventDefault(); // Prevent the default behavior of the button
@@ -154,7 +154,7 @@ function togglePendulum(event) {
     pauseButton.style.display = 'inline-block';
 
     startPendulum(event); 
-    interval = setInterval(fetchPendulumPositions, 100);
+    interval = setInterval(fetchPendulumPositions, 500);
 
   } else {
     // stop button is clicked
@@ -164,7 +164,7 @@ function togglePendulum(event) {
   }
 }
 const canvas = document.getElementById('pendulumCanvas');
-const massScalingFactor = 0.08; 
+const massScalingFactor = 0.1; 
 const lengthScalingFactor = 0.3; 
 
 function drawPendulums() {
