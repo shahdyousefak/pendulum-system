@@ -168,6 +168,7 @@ function togglePendulum(event) {
 
   }
 }
+
 const canvas = document.getElementById('pendulumCanvas');
 const massScalingFactor = 0.1; 
 const lengthScalingFactor = 0.3; 
@@ -189,9 +190,12 @@ function drawPendulums() {
     const {length, mass, angle} = pendulumValues[i];
     const rodLength = length * lengthScalingFactor;
     const ballRadius = mass * massScalingFactor;
-    const bobX = pendulumValues[i].x ? pendulumValues[i].x : pendulumValues[i].start_x - rodLength * Math.sin((180 - angle) * Math.PI / 180);
-    const bobY = pendulumValues[i].y ? pendulumValues[i].y : pendulumValues[i].start_y - rodLength * Math.cos((180 - angle) * Math.PI / 180);
-
+  
+    // Here, we subtract the angle from 90 degrees.
+    const adjustedAngle = 360 - angle; // Adjust the angle
+    const bobX = pendulumValues[i].x ? pendulumValues[i].x : pendulumValues[i].start_x + rodLength * Math.cos(adjustedAngle * Math.PI / 180);
+    const bobY = pendulumValues[i].y ? pendulumValues[i].y : pendulumValues[i].start_y - rodLength * Math.sin(adjustedAngle * Math.PI / 180);
+  
     drawPendulumString(ctx, pendulumValues[i].start_x, pendulumValues[i].start_y, bobX, bobY, pendulumValues[i].color);
     drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulumValues[i].color);
   }
@@ -246,18 +250,21 @@ function fetchPendulumPositions() {
 
           pendulumArray.forEach(pendulum => {
             //const [length, mass, angle] = pendulumValues[i];
-            const length = pendulum.length;
-            const mass = pendulum.mass;
-            const angle = pendulum.angle;
+              const length = pendulum.length;
+              const mass = pendulum.mass;
             
-            const rodLength = length * lengthScalingFactor;
-            const ballRadius = mass * massScalingFactor;
-            const bobX = pendulum.start_x - rodLength * Math.cos((angle - 90) * Math.PI / 180);
-            const bobY = pendulum.start_y - rodLength * Math.sin((angle - 90) * Math.PI / 180);            
-
-            drawPendulumString(ctx, pendulum.start_x, pendulum.start_y, bobX, bobY, pendulum.color);
-            drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulum.color);
-          })
+              // Here, we subtract the angle from 90 degrees.
+              const adjustedAngle = 360 - pendulum.angle; // Adjust the angle
+           
+              const rodLength = length * lengthScalingFactor;
+              const ballRadius = mass * massScalingFactor;
+            
+              const bobX = pendulum.start_x + rodLength * Math.cos(adjustedAngle * Math.PI / 180);
+              const bobY = pendulum.start_y - rodLength * Math.sin(adjustedAngle * Math.PI / 180); 
+            
+              drawPendulumString(ctx, pendulum.start_x, pendulum.start_y, bobX, bobY, pendulum.color);
+              drawPendulumBall(ctx, bobX, bobY, ballRadius, pendulum.color);
+            })
         }
       })
       .catch(error => {

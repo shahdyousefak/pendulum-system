@@ -22,22 +22,17 @@ let pendulumMapping = {}
 function updatePendulumData(dt, pendulum) {
     // Calculate the angular acceleration
     const g = 9.81; // Acceleration due to gravity (m/s^2)
-    const angularAcceleration = -g / pendulum.length * Math.sin(pendulum.angle);
-    
-    // Update the angular velocity and the angle
-    pendulum.angularVelocity += angularAcceleration * dt;
-    pendulum.angle += pendulum.angularVelocity * dt;
-    
-    // Keep the angle between 0 and 2π
-    pendulum.angle = pendulum.angle % (2 * Math.PI);
-    if (pendulum.angle < 0) {
-        pendulum.angle += 2 * Math.PI;
-    }
-    
-    // Calculate the new position of the pendulum bob
-    pendulum.x = pendulum.start_x + pendulum.length * Math.sin(pendulum.angle);
-    pendulum.y = pendulum.start_y - pendulum.length * Math.cos(pendulum.angle);
+    const angularAcceleration = g / pendulum.length * Math.sin(pendulum.angle);
 
+    // Update angular velocity
+    pendulum.angularVelocity += angularAcceleration * dt;
+    pendulum.angle = 360 - ((360 - pendulum.angle + pendulum.angularVelocity * dt * 180 / Math.PI) % 360);
+
+    const adjustedAngle = 360 - pendulum.angle; // Adjust the angle
+    const angleInRadians = adjustedAngle * Math.PI / 180;
+    // Update x and y
+    pendulum.x = pendulum.start_x + pendulum.length * Math.cos(angleInRadians);
+    pendulum.y = pendulum.start_y - pendulum.length * Math.sin(angleInRadians);
     console.log("Updated PENDULUM DATA:", pendulum);
 }
 
