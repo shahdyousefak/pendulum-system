@@ -88,3 +88,23 @@ input[name="angle"] {
     color: red;
     font-weight: bold;
 }
+
+button{
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    padding: 10px 20px; 
+    cursor: pointer;
+}
+
+#pauseButton {
+    display: none;
+    background-color: orange;
+    color: white;
+  }
+  
+  #startButton {
+    background-color: green;
+    color: white;
+  }
+  

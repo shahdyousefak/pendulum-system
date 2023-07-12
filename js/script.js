@@ -32,17 +32,17 @@ function checkForInvalidParameters(arr1, arr2, arr3, arr4, arr5) {
   const masses = [arr1[1], arr2[1], arr3[1], arr4[1], arr5[1]];
   const angles = [arr1[2], arr2[2], arr3[2], arr4[2], arr5[2]];
 
-  lenInvalid = lengths.some(element => parseFloat(element) > 500) ? 1 : 0;
-  massInvalid = masses.some(element => parseFloat(element) > 500) ? 1 : 0;
+  lenInvalid = lengths.some(element => parseFloat(element) > 500 || parseFloat(element) <= 0) ? 1 : 0;
+  massInvalid = masses.some(element => parseFloat(element) > 500 || parseFloat(element) <= 0) ? 1 : 0;
   angInvalid = angles.some(element => parseFloat(element) > 180) ? 1 : 0;
 
   const errorMessages = [];
 
   if (lenInvalid) {
-    errorMessages.push('Length cannot be more than 500 cm.');
+    errorMessages.push('Length must be between 1 and 500 cm.');
   }
   if (massInvalid) {
-    errorMessages.push('Mass cannot be more than 500 g.');
+    errorMessages.push('Mass must be between 1 and 500 g.');
   }
   if (angInvalid) {
     errorMessages.push('Angle cannot be more than 180 degrees.');
@@ -125,9 +125,12 @@ function togglePause(event) {
 
   if (pauseButton.innerText === 'Pause') {
     pauseButton.innerText = 'Resume';
+    pauseButton.style.backgroundColor = 'green';
     pauseButton.style.display = 'inline-block';
-  } else {
+
+  } else { // resume is clicked
     pauseButton.innerText = 'Pause';
+    pauseButton.style.backgroundColor = 'orange';
   }
 }
 
@@ -145,21 +148,24 @@ function togglePendulum(event) {
     }
 
     startButton.innerText = 'Stop';
+    startButton.style.backgroundColor = 'red';
+
     pauseButton.innerText = 'Pause';
     pauseButton.style.display = 'inline-block';
-    //initPendulumData(pendulums);
-    startPendulum(event); // Call startPendulum function
+
+    startPendulum(event); 
     interval = setInterval(fetchPendulumPositions, 100);
 
   } else {
     // stop button is clicked
     startButton.innerText = 'Start';
+    startButton.style.backgroundColor = 'green';
     pauseButton.style.display = 'none';
   }
 }
 const canvas = document.getElementById('pendulumCanvas');
-const massScalingFactor = 0.08; // Adjust the scaling factor based on your requirements
-const lengthScalingFactor = 0.3; // Adjust the scaling factor based on your requirements
+const massScalingFactor = 0.08; 
+const lengthScalingFactor = 0.3; 
 
 function drawPendulums() {
   
@@ -172,11 +178,6 @@ function drawPendulums() {
   drawRod(ctx, canvas.width, canvas.height);
 
   const pendulumValues = getPendulumValues(canvas);
-
-
-  const pendulumPositions = [
-   
-  ];
 
   // Draw the pendulums
   for (let i = 0; i < pendulumValues.length; i++) {
@@ -223,10 +224,11 @@ function fetchPendulumPositions() {
     fetch(`http://localhost:${port}`)
       .then(response => response.json())
       .then(positions => {
-        // Use the positions data to update your UI
+
         console.log(positions);
         pendulumArray.push(positions)
-        // ... Update your UI with the positions data
+
+        // Update UI with the positions data
         if (++completed >= 5) {
           console.log('all responded, now re-drawing', pendulumArray)
           const ctx = canvas.getContext('2d');
@@ -243,7 +245,6 @@ function fetchPendulumPositions() {
             const mass = pendulum.mass;
             const angle = pendulum.angle;
             
-
             const rodLength = length * lengthScalingFactor;
             const ballRadius = mass * massScalingFactor;
             const bobX = pendulum.start_x - rodLength * Math.cos((angle - 90) * Math.PI / 180);
