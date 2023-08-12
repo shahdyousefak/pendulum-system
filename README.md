@@ -1,4 +1,3 @@
-# vention-project
 ![image](https://github.com/shahdyousefak/vention-project/assets/67276189/46138edc-f2a4-4342-ad9f-7a0068865ca9)
 
 In node.js, implement a "simple pendulum" in 1 dimension. A REST interface will allow to set up an initial
